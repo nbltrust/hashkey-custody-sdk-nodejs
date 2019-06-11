@@ -8,7 +8,7 @@
     },
     "repository": {
         "type": "git",
-        "url": ""
-      },
-    "homepage": ""
+        "url": "git@github.com:nbltrust/jadepool-saas-sdk-nodejs.git"
+    },
+    "homepage": "https://github.com/nbltrust/jadepool-saas-sdk-nodejs"
 }

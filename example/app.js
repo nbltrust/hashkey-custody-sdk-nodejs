@@ -4,10 +4,6 @@ const appKey = 'TyTLvCnHINbWZQag88hhmMz1'
 const appSecret = 'uf0rPlTluGnIllGqx0X1os4hQ6rOdXDxStiN4qGd79lS6yeHZaOK4ldvRv1TBqr6'
 const apiAddr = 'http://34.92.224.225:8092'
 
-/*const appKey = 'jFJDa2Iha04tED6fYBwsjMZC'
-const appSecret = 'yeTJ3EnOkyQQEjhTMVqn165Dqjp43bhTwXLIv25Ycdu8qwDOyqpa0WV54C6sO4HW'
-const apiAddr = 'http://127.0.0.1:8092'*/
-
 async function main () {
     const api = new API(appKey, appSecret, apiAddr)
     let result
@@ -69,8 +65,8 @@ async function main () {
     }
     
     try {
-        //result = await api.getOrder("6reZqDxXwa2pBQ7AmV2K")
-        //console.log(result)
+        result = await api.getOrder("6reZqDxXwa2pBQ7AmV2K")
+        console.log(result)
         // PENDING
     } catch(e) {
         // do something
