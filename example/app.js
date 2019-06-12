@@ -11,7 +11,7 @@ async function main () {
     try {
         result= await api.createAddress("ETH")
         console.log(result)
-        // 0xdd19b76786d04e82c1ca29c35d868e58641bc8fd
+        // { address: '0xd47237a2a1b6d313794d66162d86b887361e664d' }
     } catch(e) {
         // do something
         console.log(e.response)
@@ -27,8 +27,8 @@ async function main () {
     }
     
     try {
-        //result = await api.getBalance("ETH")
-        //console.log(result)
+        result = await api.getBalance("ETH")
+        console.log(result)
         /* { balance: '0.0082000000',
             inLocked: '0.0000000000',
             inLockedFee: '0.0000000000',
@@ -42,8 +42,8 @@ async function main () {
     
 
     try {
-        //result = await api.getAssets()
-        //console.log(result)
+        result = await api.getAssets()
+        console.log(result)
         // [ 'ETH' ]
     } catch(e) {
         // do something
@@ -58,7 +58,19 @@ async function main () {
         let memo = ''
         result = await api.withdraw(id, coinType, to, value, memo)
         console.log(result)
-        // {"id":"a79c02f9f4e40997235479f2cfdf280a6dd0cebc","status":"INIT"}
+        /* {    id: 'OR3PmG6r16rQ148YLDZX',
+                bizType: 'WITHDRAW',
+                coinName: 'ETH',
+                type: 'ETH',
+                state: 'INIT',
+                memo: '',
+                value: '0.005000000000000000',
+                from: '',
+                to: '0x56204b988844b20160035273fd98dbb2a54c85f5',
+                txid:'',
+                n: 0,
+                comfirmations: 0
+        }*/
     } catch(e) {
         // do something
         console.log(e)
@@ -67,7 +79,20 @@ async function main () {
     try {
         result = await api.getOrder("6reZqDxXwa2pBQ7AmV2K")
         console.log(result)
-        // PENDING
+        /* {    id: 'J8lzB9Lej8q9wO2nRGxy',
+                bizType: 'WITHDRAW',
+                coinName: 'ETH',
+                type: 'ETH',
+                state: 'DONE',
+                memo: '',
+                value: '0.005000000000000000',
+                from: '0xdedc1eca923cc1227c20571030146d8a01b70774',
+                to: '0x56204b988844b20160035273fd98dbb2a54c85f5',
+                txid:
+                '0xd9954987b33683af5f840688d3233aeb2e7e0f2e2be004fbc93e8965d11bd175',
+                n: 0,
+                comfirmations: 27 
+        }*/
     } catch(e) {
         // do something
         console.log(e)
