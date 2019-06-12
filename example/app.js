@@ -2,7 +2,7 @@ const API = require('../index.js')
 
 const appKey = 'TyTLvCnHINbWZQag88hhmMz1'
 const appSecret = 'uf0rPlTluGnIllGqx0X1os4hQ6rOdXDxStiN4qGd79lS6yeHZaOK4ldvRv1TBqr6'
-const apiAddr = 'http://34.92.224.225:8092'
+const apiAddr = 'http://127.0.0.1:8092'
 
 async function main () {
     const api = new API(appKey, appSecret, apiAddr)
