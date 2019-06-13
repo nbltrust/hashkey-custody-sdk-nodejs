@@ -1,7 +1,4 @@
 ---
-title: API Reference
-
----
 
 
 # API签名认证
