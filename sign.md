@@ -5,8 +5,6 @@
 
 使用api之前，需要首先在SAAS后台里面创建一个钱包，默认是不能进行api访问的，在 钱包->API 配置里添加APP KEY。这样你会获得一个AppKey和一个AppSecret。
 
-AppKey代表钱包，AppSecret代表钱包的钥匙，用来签名，为了安全，请定期更换AppKey/AppSecret。
-
 所有的私有请求，都需要把AppKey放到http请求的header里，key为X-App-Key。
 例如：
 
@@ -16,7 +14,7 @@ AppKey代表钱包，AppSecret代表钱包的钥匙，用来签名，为了安�
 
 ## 签名机制
 
-所有需要签名的接口，都需要携带timestamp和nonce两个参数。timestamp是unix时间戳，单位是秒，请校对好时间，误差不要超过1分钟。nonce是任意的字符串，需要保证10分钟内不能重复，否则会被识别为重放攻击。
+所有需要签名的接口，都需要携带timestamp和nonce两个参数。timestamp是unix时间戳，单位是秒，请校对好时间，误差不要超过1分钟。nonce是任意的字符串，需要保证10分钟内不能重复。
 
 签名的字符串需要将参数key按照字母排序，进行url参数化处理，然后用&符号进行连接。最后对数据使用AppSecret进行HMAC-SHA256签名，将结果转化为hex字符串，作为sign的值放到参数里。
 
