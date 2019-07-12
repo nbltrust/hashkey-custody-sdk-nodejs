@@ -93,6 +93,26 @@ async function main () {
 main()
 ```
 
+## 订单通知示例：
+
+```
+{ id: '9J6NzaoL13lj85ZqE0YO',
+  bizType: 'DEPOSIT',
+  coinName: 'ATOM',
+  type: 'ATOM',
+  state: 'DONE',
+  memo: '',
+  value: '10.000000000000000000',
+  fee: '0.000000000000000000',
+  from: 'cosmos1z7jw2deueg37nd6v3flmn4wy2v3nhz55wyjqgk',
+  to: 'cosmos1q0fskv7x737mx5ma7ts8n25l6tudf36jr2x2rl',
+  txid: 'AF6660242D98767322E75B40A49CFDD3578D5AC02F52411B5FAD523AAB7F6E64',
+  n: 0,
+  block: -1,
+  confirmations: 0,
+  sign: '62d90927ce1fbdac2eeaf117facae55005678ed0016e3c57c0ca1148a027b570' 
+}
+```
 ## License
 
 MIT
