@@ -28,7 +28,7 @@ class API {
      * @param {string} coinType coin type, such as ETH, BTC
      * @return {string} coin address
      */
-    async createAddress (coinType) {
+    async createAddress (coinType, mode) {
         if (!coinType) {
             throw new Error('sorry, coinType must be nonempty')
         }
@@ -36,6 +36,7 @@ class API {
         var data = {
             timestamp: Number.parseInt(new Date().valueOf()/1000),
             nonce: this.generateNonce(),
+            mode: mode,
         }
         let msg = _buidlMsg(data)
         var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
@@ -221,6 +222,40 @@ class API {
             throw new Error(JSON.stringify(result.data))
         }
         return result.data.data
+    }
+
+    /**
+     * verify sign
+     * @param {Object} data
+     * @param {String} sign
+     * @return {Boolean} 
+     */
+    verifySign (data, sign) {
+        if (!data) {
+            throw new Error('sorry, data must be nonempty')
+        }
+        if (!data.sign) {
+            throw new Error('sorry, data.sign must be nonempty')
+        }
+        
+        sign = sign || data.sign
+        delete(data.sign)
+        let msg = _buidlMsg(data)
+        return crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex') == sign
+    }
+
+    /**
+     * sign data
+     * @param {Object} data
+     * @return {String} 
+     */
+    sign(data) {
+        if (!data) {
+            throw new Error('sorry, data must be nonempty')
+        }
+        
+        let msg = _buidlMsg(data)
+        return crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex')
     }
 
     generateNonce() {
