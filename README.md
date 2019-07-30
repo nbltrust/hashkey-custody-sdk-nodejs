@@ -54,8 +54,6 @@ async function main () {
         console.log(e)
     }
     
-
-
     // get all coin list
     try {
         result = await api.getAssets()
@@ -80,6 +78,28 @@ async function main () {
     }
     
 
+    try {
+        let id = ''+new Date().valueOf()
+        let coinType = 'ATOM'
+        let value = '0.06'
+        result = await api.delegate(id, coinType, value)
+        console.log(result)
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
+
+    try {
+        let id = ''+new Date().valueOf()
+        let coinType = 'ATOM'
+        let value = '0.01'
+        result = await api.undelegate(id, coinType, value)
+        console.log(result)
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
+    
     // get a order info
     try {
         result = await api.getOrder("6reZqDxXwa2pBQ7AmV2K")

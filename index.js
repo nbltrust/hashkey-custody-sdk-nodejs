@@ -225,6 +225,117 @@ class API {
     }
 
     /**
+     * get funding wallets list
+     * @return {array} funding wallets list
+     */
+    async getFundingWallets () {
+        let url = this.apiAddr + "/api/v1/funding/balances"
+        var data = {
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce()
+        }
+        let msg = _buidlMsg(data)
+        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
+        data.sign = sign
+    
+        let result = await axios.get(url, {
+            params: data,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Company-Key': this.appKey
+            }
+        })
+
+        if (!!result.data.code) {
+            throw new Error(JSON.stringify(result.data))
+        }
+        return result.data.data
+    }
+
+    /**
+     * funding transfer
+     * @param {string} from from wallet id
+     * @param {string} to to wallet id
+     * @param {string} coinType coin type
+     * @param {string} value transfer value
+     * @param {string} memo memo
+     * @return {Object} 
+     */
+    async fundingTransfer (from, to, coinType, value, memo) {
+        if (!from || !coinType || !to || !value) {
+            throw new Error('sorry, from & to & coinType & value must be nonempty')
+        }
+        if (isNaN(value)) {
+            throw new Error('sorry, value must be a number')
+        }
+
+        let url = this.apiAddr + "/api/v1/funding/transfer"
+        var data = {
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce(),
+            from: from,
+            to: to,
+            assetName: coinType,
+            value: value,
+            memo: memo || ''
+        }
+        let msg = _buidlMsg(data)
+        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
+        data.sign = sign
+        
+        let result = await axios.post(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Company-Key': this.appKey
+            }
+        })
+
+        if (!!result.data.code) {
+            throw new Error(JSON.stringify(result.data))
+        }
+        return result.data.data
+    }
+
+    /**
+     * get funding records list
+     * @param {int} page page number
+     * @param {int} amount item amount
+     * @param {string} sort sort, available values: DESC, ASC
+     * @return {array} funding records list
+     */
+    async getFundingRecords (page, amount, sort, coins, froms, toes, type, orderBy) {
+        let url = this.apiAddr + "/api/v1/funding/records"
+        var data = {
+            page: page || 1,
+            amount: amount || 10,
+            sort: sort || 'DESC',
+            coins: coins || '',
+            froms: froms || '',
+            toes: toes || '',
+            type: type || '',
+            orderBy: orderBy || 'created_at',
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce()
+        }
+        let msg = _buidlMsg(data)
+        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
+        data.sign = sign
+    
+        let result = await axios.get(url, {
+            params: data,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Company-Key': this.appKey
+            }
+        })
+
+        if (!!result.data.code) {
+            throw new Error(JSON.stringify(result.data))
+        }
+        return result.data.data
+    }
+
+    /**
      * verify sign
      * @param {Object} data
      * @param {String} sign
@@ -256,6 +367,110 @@ class API {
         
         let msg = _buidlMsg(data)
         return crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex')
+    }
+
+    /**
+     * delegate
+     * @param {string} id request id, unique
+     * @param {string} coinType coin type
+     * @param {string} value value
+     * @return {Object} 
+     */
+    async delegate (id, coinType, value) {
+        if (!id || !coinType || !value) {
+            throw new Error('sorry, id & coinType & to & value must be nonempty')
+        }
+        if (isNaN(value)) {
+            throw new Error('sorry, value must be a number')
+        }
+
+        let url = this.apiAddr + "/api/v1/staking/" + coinType + "/delegate"
+        var data = {
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce(),
+            value: value,
+            id: id
+        }
+        let msg = _buidlMsg(data)
+        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
+        data.sign = sign
+        
+        let result = await axios.post(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-App-Key': this.appKey
+            }
+        })
+
+        return result.data
+    }
+
+    /**
+     * undelegate
+     * @param {string} id  request id, unique
+     * @param {string} coinType coin type
+     * @param {string} value  value
+     * @return {Object} 
+     */
+    async undelegate (id, coinType, value) {
+        if (!id || !coinType || !value) {
+            throw new Error('sorry, id & coinType & to & value must be nonempty')
+        }
+        if (isNaN(value)) {
+            throw new Error('sorry, value must be a number')
+        }
+
+        let url = this.apiAddr + "/api/v1/staking/" + coinType + "/undelegate"
+        var data = {
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce(),
+            value: value,
+            id: id
+        }
+        let msg = _buidlMsg(data)
+        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
+        data.sign = sign
+        
+        let result = await axios.post(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-App-Key': this.appKey
+            }
+        })
+
+        return result.data
+    }
+
+    /**
+     * get asset all validators
+     * @param {string} coinType such as ETH, BTC
+     * @return {Object} 
+     */
+    async getValidators (coinType) {
+        if (!coinType) {
+            throw new Error('sorry, coinType must be nonempty')
+        }
+        let url = this.apiAddr + "/api/v1/staking/" + coinType + "/validators"
+        var data = {
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce(),
+        }
+        let msg = _buidlMsg(data)
+        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
+        data.sign = sign
+        
+        let result = await axios.get(url, {
+            params: data,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-App-Key': this.appKey
+            }
+        })
+
+        if (!!result.data.code) {
+            throw new Error(JSON.stringify(result.data))
+        }
+        return result.data.data
     }
 
     generateNonce() {
