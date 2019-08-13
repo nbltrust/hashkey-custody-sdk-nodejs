@@ -125,6 +125,18 @@ async function main () {
         // do something
         console.log(e)
     }
+
+    try {
+        let id = ''+new Date().valueOf()
+        let coinType = 'ATOM'
+        let value = '0.06'
+        let expiredAt = parseInt(new Date().valueOf()/1000) + 86400 * 21
+        //result = await api.addUrgentStakingFunding(id, coinType, value, expiredAt)
+        //console.log(result)
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
 }
 
 main()

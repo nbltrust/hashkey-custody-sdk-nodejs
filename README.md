@@ -108,6 +108,50 @@ async function main () {
         // do something
         console.log(e)
     }
+
+    // get wallets' balance
+    try {
+        result = await api.getFundingWallets()
+        console.dir(result, {depth: null})
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
+
+    // funding transfer
+    try {
+        const from = 'L6RayqPn4jXExW0'
+        const to = 'e5dJyVp8R3B1m4o'
+        const coinType = 'ETH'
+        const value = '0.01'
+        result = await api.fundingTransfer(from, to, coinType, value)
+        console.log(result)
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
+
+    // get funding transfer records
+    try {
+        result = await api.getFundingRecords()
+        console.log(result)
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
+
+    // add urgent staking funding
+    try {
+        let id = ''+new Date().valueOf()
+        let coinType = 'ATOM'
+        let value = '0.06'
+        let expiredAt = parseInt(new Date().valueOf()/1000) + 86400 * 21
+        result = await api.addUrgentStakingFunding(id, coinType, value, expiredAt)
+        console.log(result)
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
 }
 
 main()

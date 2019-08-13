@@ -473,6 +473,47 @@ class API {
         return result.data.data
     }
 
+    /**
+     * addUrgentStakingFunding
+     * @param {string} id  request id, unique
+     * @param {string} coinType coin type
+     * @param {string} value  value
+     * @param {number} expiredAt  value
+     * @return {Object} 
+     */
+    async addUrgentStakingFunding (id, coinType, value, expiredAt) {
+        if (!id || !coinType || !value || !expiredAt) {
+            throw new Error('sorry, id & expiredAt & value must be nonempty')
+        }
+        if (isNaN(value)) {
+            throw new Error('sorry, value must be a number')
+        }
+        if (isNaN(expiredAt)) {
+            throw new Error('sorry, value must be a number')
+        }
+
+        let url = this.apiAddr + "/api/v1/staking/" + coinType + "/funding"
+        var data = {
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce(),
+            value: value,
+            expiredAt: expiredAt,
+            id: id
+        }
+        let msg = _buidlMsg(data)
+        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
+        data.sign = sign
+        
+        let result = await axios.post(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-App-Key': this.appKey
+            }
+        })
+
+        return result.data
+    }
+
     generateNonce() {
         this._nonceCount++
         let timestamp = new Date().valueOf()
