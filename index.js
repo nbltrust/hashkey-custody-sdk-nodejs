@@ -1,5 +1,6 @@
 var axios = require('axios')
 var crypto = require('crypto')
+const _ = require('lodash')
 
 /**
  * API class
@@ -8,17 +9,17 @@ var crypto = require('crypto')
 class API {
     /**
      * constructor
-     * @param {string} appKey app key
-     * @param {string} appSecret app secret
-     * @param {string} apiAddr app addr, http://host:port, https://host:port
+     * @param {string} key key
+     * @param {string} secret secret
+     * @param {string} apiAddr api srv addr, http://host:port, https://host:port
      */
-    constructor (appKey, appSecret, apiAddr) {
-      if (!appKey || !appSecret || !apiAddr) {
+    constructor (key, secret, apiAddr) {
+      if (!key || !secret || !apiAddr) {
         throw new Error('initialization failed, missing parameter...')
       }
 
-      this.appKey = appKey
-      this.appSecret = appSecret
+      this.key = key
+      this.secret = secret
       this.apiAddr = apiAddr
       this._nonceCount = 0
     }
@@ -36,22 +37,19 @@ class API {
         var data = {
             timestamp: Number.parseInt(new Date().valueOf()/1000),
             nonce: this.generateNonce(),
-            mode: mode,
+            mode: mode || "",
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
-        data.sign = sign
+        data.sign = this.sign(data)
     
         let result = await axios.post(url, data, {
             headers: {
                 'Content-Type': 'application/json',
-                'X-App-Key': this.appKey
+                'X-App-Key': this.key
             }
         })
 
-        if (!!result.data.code) {
-            throw new Error(JSON.stringify(result.data))
-        }
+        this.checkData(result.data)
+        
         return result.data.data
     }
 
@@ -72,19 +70,16 @@ class API {
             nonce: this.generateNonce(),
             address: address
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
-        data.sign = sign
+        data.sign = this.sign(data)
 
         let result = await axios.post(url, data, {
             headers: {
                 'Content-Type': 'application/json',
-                'X-App-Key': this.appKey
+                'X-App-Key': this.key
             }
         })
-        if (!!result.data.code) {
-            throw new Error(JSON.stringify(result.data))
-        }
+        this.checkData(result.data)
+        
         return result.data.data.valid
     }
 
@@ -98,21 +93,18 @@ class API {
             timestamp: Number.parseInt(new Date().valueOf()/1000),
             nonce: this.generateNonce()
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
-        data.sign = sign
+        data.sign = this.sign(data)
     
         let result = await axios.get(url, {
             params: data,
             headers: {
                 'Content-Type': 'application/json',
-                'X-App-Key': this.appKey
+                'X-App-Key': this.key
             }
         })
 
-        if (!!result.data.code) {
-            throw new Error(JSON.stringify(result.data))
-        }
+        this.checkData(result.data)
+
         return result.data.data.assets
     }
 
@@ -130,21 +122,17 @@ class API {
             timestamp: Number.parseInt(new Date().valueOf()/1000),
             nonce: this.generateNonce(),
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
-        data.sign = sign
+        data.sign = this.sign(data)
         
         let result = await axios.get(url, {
             params: data,
             headers: {
                 'Content-Type': 'application/json',
-                'X-App-Key': this.appKey
+                'X-App-Key': this.key
             }
         })
 
-        if (!!result.data.code) {
-            throw new Error(JSON.stringify(result.data))
-        }
+        this.checkData(result.data)
         return result.data.data
     }
 
@@ -163,21 +151,17 @@ class API {
             timestamp: Number.parseInt(new Date().valueOf()/1000),
             nonce: this.generateNonce()
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
-        data.sign = sign
+        data.sign = this.sign(data)
     
         let result = await axios.get(url, {
             params: data,
             headers: {
                 'Content-Type': 'application/json',
-                'X-App-Key': this.appKey
+                'X-App-Key': this.key
             }
         })
 
-        if (!!result.data.code) {
-            throw new Error(JSON.stringify(result.data))
-        }
+        this.checkData(result.data)
         return result.data.data
     }
 
@@ -207,20 +191,16 @@ class API {
             memo: memo,
             id: id
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
-        data.sign = sign
+        data.sign = this.sign(data)
         
         let result = await axios.post(url, data, {
             headers: {
                 'Content-Type': 'application/json',
-                'X-App-Key': this.appKey
+                'X-App-Key': this.key
             }
         })
 
-        if (!!result.data.code) {
-            throw new Error(JSON.stringify(result.data))
-        }
+        this.checkData(result.data)
         return result.data.data
     }
 
@@ -234,21 +214,17 @@ class API {
             timestamp: Number.parseInt(new Date().valueOf()/1000),
             nonce: this.generateNonce()
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
-        data.sign = sign
+        data.sign = this.sign(data)
     
         let result = await axios.get(url, {
             params: data,
             headers: {
                 'Content-Type': 'application/json',
-                'X-Company-Key': this.appKey
+                'X-Company-Key': this.key
             }
         })
 
-        if (!!result.data.code) {
-            throw new Error(JSON.stringify(result.data))
-        }
+        this.checkData(result.data)
         return result.data.data
     }
 
@@ -279,20 +255,16 @@ class API {
             value: value,
             memo: memo || ''
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
-        data.sign = sign
+        data.sign = this.sign(data)
         
         let result = await axios.post(url, data, {
             headers: {
                 'Content-Type': 'application/json',
-                'X-Company-Key': this.appKey
+                'X-Company-Key': this.key
             }
         })
 
-        if (!!result.data.code) {
-            throw new Error(JSON.stringify(result.data))
-        }
+        this.checkData(result.data)
         return result.data.data
     }
 
@@ -317,56 +289,18 @@ class API {
             timestamp: Number.parseInt(new Date().valueOf()/1000),
             nonce: this.generateNonce()
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
-        data.sign = sign
+        data.sign = this.sign(data)
     
         let result = await axios.get(url, {
             params: data,
             headers: {
                 'Content-Type': 'application/json',
-                'X-Company-Key': this.appKey
+                'X-Company-Key': this.key
             }
         })
 
-        if (!!result.data.code) {
-            throw new Error(JSON.stringify(result.data))
-        }
+        this.checkData(result.data)
         return result.data.data
-    }
-
-    /**
-     * verify sign
-     * @param {Object} data
-     * @param {String} sign
-     * @return {Boolean} 
-     */
-    verifySign (data, sign) {
-        if (!data) {
-            throw new Error('sorry, data must be nonempty')
-        }
-        if (!data.sign) {
-            throw new Error('sorry, data.sign must be nonempty')
-        }
-        
-        sign = sign || data.sign
-        delete(data.sign)
-        let msg = _buidlMsg(data)
-        return crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex') == sign
-    }
-
-    /**
-     * sign data
-     * @param {Object} data
-     * @return {String} 
-     */
-    sign(data) {
-        if (!data) {
-            throw new Error('sorry, data must be nonempty')
-        }
-        
-        let msg = _buidlMsg(data)
-        return crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex')
     }
 
     /**
@@ -391,16 +325,18 @@ class API {
             value: value,
             id: id
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
+        let msg = _buildMsg(data)
+        var sign = crypto.createHmac('SHA256', this.secret).update(msg).digest('hex');
         data.sign = sign
         
         let result = await axios.post(url, data, {
             headers: {
                 'Content-Type': 'application/json',
-                'X-App-Key': this.appKey
+                'X-App-Key': this.key
             }
         })
+
+        this.checkData(result.data)
 
         return result.data
     }
@@ -427,16 +363,18 @@ class API {
             value: value,
             id: id
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
+        let msg = _buildMsg(data)
+        var sign = crypto.createHmac('SHA256', this.secret).update(msg).digest('hex');
         data.sign = sign
         
         let result = await axios.post(url, data, {
             headers: {
                 'Content-Type': 'application/json',
-                'X-App-Key': this.appKey
+                'X-App-Key': this.key
             }
         })
+
+        this.checkData(result.data)
 
         return result.data
     }
@@ -455,21 +393,19 @@ class API {
             timestamp: Number.parseInt(new Date().valueOf()/1000),
             nonce: this.generateNonce(),
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
+        let msg = _buildMsg(data)
+        var sign = crypto.createHmac('SHA256', this.secret).update(msg).digest('hex');
         data.sign = sign
         
         let result = await axios.get(url, {
             params: data,
             headers: {
                 'Content-Type': 'application/json',
-                'X-App-Key': this.appKey
+                'X-App-Key': this.key
             }
         })
 
-        if (!!result.data.code) {
-            throw new Error(JSON.stringify(result.data))
-        }
+        this.checkData(result.data)
         return result.data.data
     }
 
@@ -500,16 +436,18 @@ class API {
             expiredAt: expiredAt,
             id: id
         }
-        let msg = _buidlMsg(data)
-        var sign = crypto.createHmac('SHA256', this.appSecret).update(msg).digest('hex');
+        let msg = _buildMsg(data)
+        var sign = crypto.createHmac('SHA256', this.secret).update(msg).digest('hex');
         data.sign = sign
         
         let result = await axios.post(url, data, {
             headers: {
                 'Content-Type': 'application/json',
-                'X-App-Key': this.appKey
+                'X-App-Key': this.key
             }
         })
+
+        this.checkData(result.data)
 
         return result.data
     }
@@ -520,16 +458,104 @@ class API {
         let rand = Math.round(Math.random() * timestamp)
         return ('' + timestamp + this._nonceCount + rand)
     }
+
+    /**
+     * check data
+     * @param {Object} data
+     * @return {String} 
+     */
+    checkData(data) {
+        if (!data || !data.sign) {
+            throw new Error(JSON.stringify(data))
+        }
+
+        let sign = this.sign(data.data)
+        if (sign != data.sign) {
+            throw new Error("sign error")
+        }
+
+        if (!!data.code) {
+            throw new Error(JSON.stringify(data))
+        }
+    }
+
+        /**
+     * verify sign
+     * @param {Object} data
+     * @return {Boolean} 
+     */
+    verifySign (data) {
+        if (!data) {
+            throw new Error('sorry, data must be nonempty')
+        }
+        if (!data.sign) {
+            throw new Error('sorry, data.sign must be nonempty')
+        }
+        
+        sign = data.sign
+        delete(data.sign)
+        let msg = _buildMsg(data)
+        return crypto.createHmac('SHA256', this.secret).update(msg).digest('hex') == sign
+    }
+
+    /**
+     * sign data
+     * @param {Object} data
+     * @return {String} 
+     */
+    sign(data) {
+        if (!data) {
+            throw new Error('sorry, data must be nonempty')
+        }
+        
+        let msg = _buildMsg(data)
+        return crypto.createHmac('SHA256', this.secret).update(msg).digest('hex')
+    }
 }
 
-function _buidlMsg(obj) {
-    var keys = Object.keys(obj)
-    keys.sort()
-    let keyVals = []
-    for (let i = 0; i < keys.length; i++) {
-        let key = keys[i]
-        keyVals.push(key + "=" + obj[key])
+/**
+ * build message
+ * @param {object} obj
+ */
+function _buildMsg(obj) {
+    let arr = []
+    if (_.isArray(obj)) {
+        arr = obj.map((o, i) => ({
+            k: i,
+            v: _buildMsg(o)
+        }))
+    } else if (_.isObject(obj)) {
+        for (let k in obj) {
+            if (obj[k] !== undefined) {
+                arr.push({ k, v: _buildMsg(obj[k]) })
+            }
+        }
+    } else if (obj === undefined || obj === null) {
+        return ''
+    } else {
+        return obj.toString()
     }
+
+    // Sort Array
+    arr.sort((a, b) => {
+        let aVal
+        let bVal
+        aVal = a.k.toString()
+        bVal = b.k.toString()
+        if (aVal < bVal) {
+            return -1
+        } else if (aVal === bVal) {
+            return 0
+        } else {
+            return 1
+        }
+    })
+
+    let keyVals = []
+    for (let i = 0; i < arr.length; i++) {
+        keyVals.push(arr[i].k + "=" + arr[i].v)
+    }
+
     return keyVals.join('&')
 }
 
