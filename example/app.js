@@ -19,7 +19,7 @@ async function main () {
     }*/
     
     /*try {
-        result = await api.verifyAddress("ETH", "0x07612D8557F2C72D3Acc818bDcBa4199d58dD831") 
+        result = await api.verifyAddress("ETH", result.address) 
         console.log(result)
     } catch(e) {
         console.log(e)
@@ -61,7 +61,7 @@ async function main () {
         console.log(e)
     }*/
 
-    try {
+    /*try {
         let id = ''+new Date().valueOf()
         let coinType = 'IRIS'
         let value = '0.06'
@@ -70,9 +70,9 @@ async function main () {
     } catch(e) {
         // do something
         console.log(e)
-    }
+    }*/
 
-    try {
+    /*try {
         let id = ''+new Date().valueOf()
         let coinType = 'IRIS'
         let value = '0.01'
@@ -81,15 +81,15 @@ async function main () {
     } catch(e) {
         // do something
         console.log(e)
-    }
+    }*/
 
-    try {
+    /*try {
         result = await api.getValidators("IRIS")
         console.log(result)
     } catch(e) {
         // do something
         console.log(e)
-    }
+    }*/
 
     /*try {
         result = await api.getFundingWallets()
@@ -130,6 +130,15 @@ async function main () {
         // do something
         console.log(e)
     }*/
+
+    /*try {
+        result = await api.getDayInterest("IRIS", "2019-09-26")
+        console.log(result)
+    } catch(e) {
+        // do something
+        console.log(e)
+    }*/
+    
 }
 
 main()

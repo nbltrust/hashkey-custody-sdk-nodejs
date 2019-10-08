@@ -410,6 +410,42 @@ class API {
     }
 
     /**
+     * get asset one day interest
+     * @param {string} coinType such as ETH, BTC
+     * @param {string} date such as 2019-10-01
+     * @return {Object} 
+     */
+    async getDayInterest (coinType, date, timezone) {
+        if (!coinType) {
+            throw new Error('sorry, coinType must be nonempty')
+        }
+        if (!timezone) {
+            timezone = "8"
+        }
+        let url = this.apiAddr + "/api/v1/staking/" + coinType + "/interest"
+        var data = {
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce(),
+            date: date,
+            timezone: timezone,
+        }
+        let msg = _buildMsg(data)
+        var sign = crypto.createHmac('SHA256', this.secret).update(msg).digest('hex');
+        data.sign = sign
+        
+        let result = await axios.get(url, {
+            params: data,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-App-Key': this.key
+            }
+        })
+
+        this.checkData(result.data)
+        return result.data.data
+    }
+
+    /**
      * addUrgentStakingFunding
      * @param {string} id  request id, unique
      * @param {string} coinType coin type
