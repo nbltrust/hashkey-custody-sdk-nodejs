@@ -131,13 +131,13 @@ async function main () {
         console.log(e)
     }*/
 
-    /*try {
-        result = await api.getDayInterest("IRIS", "2019-09-26")
+    try {
+        result = await api.getStakingInterest("IRIS", "2019-09-26")
         console.log(result)
     } catch(e) {
         // do something
         console.log(e)
-    }*/
+    }
     
 }
 

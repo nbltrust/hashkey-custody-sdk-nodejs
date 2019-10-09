@@ -415,19 +415,16 @@ class API {
      * @param {string} date such as 2019-10-01
      * @return {Object} 
      */
-    async getDayInterest (coinType, date, timezone) {
+    async getStakingInterest (coinType, date) {
         if (!coinType) {
             throw new Error('sorry, coinType must be nonempty')
         }
-        if (!timezone) {
-            timezone = "8"
-        }
+
         let url = this.apiAddr + "/api/v1/staking/" + coinType + "/interest"
         var data = {
             timestamp: Number.parseInt(new Date().valueOf()/1000),
             nonce: this.generateNonce(),
             date: date,
-            timezone: timezone,
         }
         let msg = _buildMsg(data)
         var sign = crypto.createHmac('SHA256', this.secret).update(msg).digest('hex');
