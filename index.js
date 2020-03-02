@@ -312,7 +312,7 @@ class API {
      */
     async delegate (id, coinType, value) {
         if (!id || !coinType || !value) {
-            throw new Error('sorry, id & coinType & to & value must be nonempty')
+            throw new Error('sorry, id & coinType & value must be nonempty')
         }
         if (isNaN(value)) {
             throw new Error('sorry, value must be a number')
@@ -350,7 +350,7 @@ class API {
      */
     async undelegate (id, coinType, value) {
         if (!id || !coinType || !value) {
-            throw new Error('sorry, id & coinType & to & value must be nonempty')
+            throw new Error('sorry, id & coinType & value must be nonempty')
         }
         if (isNaN(value)) {
             throw new Error('sorry, value must be a number')
@@ -362,6 +362,37 @@ class API {
             nonce: this.generateNonce(),
             value: value,
             id: id
+        }
+        let msg = _buildMsg(data)
+        var sign = crypto.createHmac('SHA256', this.secret).update(msg).digest('hex');
+        data.sign = sign
+        
+        let result = await axios.post(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-App-Key': this.key
+            }
+        })
+
+        this.checkData(result.data)
+
+        return result.data
+    }
+
+    /**
+     * claim reward
+     * @param {string} coinType coin type
+     * @return {Object} 
+     */
+    async claimReward (coinType) {
+        if (!coinType) {
+            throw new Error('sorry, coinType must be nonempty')
+        }
+
+        let url = this.apiAddr + "/api/v1/staking/" + coinType + "/claimReward"
+        var data = {
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce(),
         }
         let msg = _buildMsg(data)
         var sign = crypto.createHmac('SHA256', this.secret).update(msg).digest('hex');
@@ -410,7 +441,7 @@ class API {
     }
 
     /**
-     * get asset one day interest
+     * get one day staking interest
      * @param {string} coinType such as ETH, BTC
      * @param {string} date such as 2019-10-01
      * @return {Object} 

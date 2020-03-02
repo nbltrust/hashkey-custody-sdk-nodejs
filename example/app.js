@@ -1,46 +1,66 @@
 const API = require('../index.js')
 
 
-const appKey = 'jFJDa2Iha04tED6fYBwsjMZC'
-const appSecret = 'yeTJ3EnOkyQQEjhTMVqn165Dqjp43bhTwXLIv25Ycdu8qwDOyqpa0WV54C6sO4HW'
-const apiAddr = 'http://127.0.0.1:8092'
-
+const appKey = 'n6ulC0zWR4IegxZSvXI9yB6o'
+const appSecret = 'SlQSoHPlZUwEhbymk5DJggRk0tjk4T6WdtqQXTT4QyfKpjWOBG60yiibA1TE3wmY'
+const apiAddr = 'https://openapi.jadepool.io'
+const api = new API(appKey, appSecret, apiAddr)
 
 async function main () {
-    const api = new API(appKey, appSecret, apiAddr)
-    let result
+    await createAddress("ETH") 
+}
 
-    /*try {
-        result= await api.createAddress("ETH", "auto")
+main()
+
+async function createAddress(coinType) {
+    try {
+        result= await api.createAddress(coinType, "auto")
         console.log(result)
     } catch(e) {
         // do something
         console.log(e)
-    }*/
-    
-    /*try {
-        result = await api.verifyAddress("ETH", result.address) 
+    }
+}
+
+async function verifyAddress(coinType, address) {
+    try {
+        result = await api.verifyAddress(coinType, address) 
         console.log(result)
     } catch(e) {
         console.log(e)
-    }*/
-    
-    /*try {
-        result = await api.getBalance("ETH")
+    }
+}
+
+async function getBalance(coinType) {
+    try {
+        result = await api.getBalance(coinType)
         console.log(result)
     } catch(e) {
         console.log(e)
-    }*/
-    
-    /*try {
+    }
+}
+
+async function getBalance(coinType) {
+    try {
+        result = await api.getBalance(coinType)
+        console.log(result)
+    } catch(e) {
+        console.log(e)
+    }
+}
+
+async function getAssets() {
+    try {
         result = await api.getAssets()
         console.log(result)
     } catch(e) {
         // do something
         console.log(e)
-    }*/
-       
-    /*try {
+    }
+}
+
+async function withdraw() {
+    try {
         let id = ''+new Date().valueOf()
         let coinType = 'ETH'
         let to = '0x0701C454D88d69B66007Bf8A03584C263D3266bb'
@@ -51,55 +71,73 @@ async function main () {
     } catch(e) {
         // do something
         console.log(e)
-    }*/ 
+    }
+}
 
-    /*try {
-        result = await api.getOrder("J6NzaoL13lqBj85ZqE0Y")
+async function getOrder(orderID) {
+    try {
+        result = await api.getOrder(orderID)
         console.log(result)
     } catch(e) {
         // do something
         console.log(e)
-    }*/
+    }
+}
 
-    /*try {
+async function getValidators(coinType) {
+    try {
+        result = await api.getValidators(coinType)
+        console.log(result)
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
+}
+
+async function delegate(coinType, value) {
+    try {
         let id = ''+new Date().valueOf()
-        let coinType = 'IRIS'
-        let value = '0.06'
         result = await api.delegate(id, coinType, value)
         console.log(result)
     } catch(e) {
         // do something
         console.log(e)
-    }*/
+    }
+}
 
-    /*try {
+async function undelegate(coinType, value) {
+    try {
         let id = ''+new Date().valueOf()
-        let coinType = 'IRIS'
-        let value = '0.01'
         result = await api.undelegate(id, coinType, value)
         console.log(result)
     } catch(e) {
         // do something
         console.log(e)
-    }*/
+    }
+}
 
-    /*try {
-        result = await api.getValidators("IRIS")
+async function claimReward(coinType) {
+    try {
+        result = await api.claimReward(coinType)
         console.log(result)
     } catch(e) {
         // do something
         console.log(e)
-    }*/
+    }
+}
 
-    /*try {
+async function getFundingWallets() {
+    try {
         result = await api.getFundingWallets()
         console.dir(result, {depth: null})
     } catch(e) {
         // do something
         console.log(e)
-    }*/
+    }
+}
 
-    /*try {
+async function fundingTransfer() {
+    try {
         const from = 'L6RayqPn4jXExW0'
         const to = 'e5dJyVp8R3B1m4o'
         const coinType = 'ETH'
@@ -109,17 +147,21 @@ async function main () {
     } catch(e) {
         // do something
         console.log(e)
-    }*/
+    }
+}
 
-    /*try {
+async function getFundingRecords() {
+    try {
         result = await api.getFundingRecords()
         console.log(result)
     } catch(e) {
         // do something
         console.log(e)
-    }*/
+    }
+}
 
-    /*try {
+async function addUrgentStakingFunding() {
+    try {
         let id = ''+new Date().valueOf()
         let coinType = 'ATOM'
         let value = '0.06'
@@ -129,16 +171,15 @@ async function main () {
     } catch(e) {
         // do something
         console.log(e)
-    }*/
+    }
+}
 
+async function getStakingInterest(coinType, date) {
     try {
-        result = await api.getStakingInterest("IRIS", "2019-09-26")
+        result = await api.getStakingInterest(coinType, date)
         console.log(result)
     } catch(e) {
         // do something
         console.log(e)
     }
-    
 }
-
-main()
