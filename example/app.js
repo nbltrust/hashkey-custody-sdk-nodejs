@@ -40,15 +40,6 @@ async function getBalance(coinType) {
     }
 }
 
-async function getBalance(coinType) {
-    try {
-        result = await api.getBalance(coinType)
-        console.log(result)
-    } catch(e) {
-        console.log(e)
-    }
-}
-
 async function getAssets() {
     try {
         result = await api.getAssets()
