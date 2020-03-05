@@ -1,9 +1,9 @@
 const API = require('../index.js')
 
 
-const appKey = 'n6ulC0zWR4IegxZSvXI9yB6o'
-const appSecret = 'SlQSoHPlZUwEhbymk5DJggRk0tjk4T6WdtqQXTT4QyfKpjWOBG60yiibA1TE3wmY'
-const apiAddr = 'https://openapi.jadepool.io'
+const appKey = 'XXXXXXXXXX'          
+const appSecret = 'XXXXXXXXXXXXXXXXXXXXXXX'
+const apiAddr = 'XXXXXXXXXXX'   // host for trial envirenment is: https://openapi.jadepool.io
 const api = new API(appKey, appSecret, apiAddr)
 
 async function main () {
