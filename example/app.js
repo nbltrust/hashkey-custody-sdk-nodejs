@@ -1,8 +1,8 @@
 const API = require('../index.js')
 
 
-const appKey = 'XXXXXXXXXX'          
-const appSecret = 'XXXXXXXXXXXXXXXXXXXXXXX'
+const appKey = 'XXXXXXXXXX'    // please generate in your wallet firstly, and fill API Key in here
+const appSecret = 'XXXXXXXXXXXXXXXXXXXXXXX'   // please generate in your wallet firstly, and fill API Secret in here
 const apiAddr = 'XXXXXXXXXXX'   // host for trial envirenment is: https://openapi.jadepool.io
 const api = new API(appKey, appSecret, apiAddr)
 
