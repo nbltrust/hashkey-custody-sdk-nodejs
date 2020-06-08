@@ -84,11 +84,36 @@ class API {
     }
 
     /**
-     * get asset list
+     * get app asset list
      * @return {array} coin type list
      */
     async getAssets () {
         let url = this.apiAddr + "/api/v1/app/assets"
+        var data = {
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce()
+        }
+        data.sign = this.sign(data)
+    
+        let result = await axios.get(url, {
+            params: data,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-App-Key': this.key
+            }
+        })
+
+        this.checkData(result.data)
+
+        return result.data.data.assets
+    }
+
+    /**
+     * get app all asset list
+     * @return {array} coin type list
+     */
+    async getAllAssets () {
+        let url = this.apiAddr + "/api/v1/app/allAssets"
         var data = {
             timestamp: Number.parseInt(new Date().valueOf()/1000),
             nonce: this.generateNonce()
@@ -514,6 +539,121 @@ class API {
         this.checkData(result.data)
 
         return result.data
+    }
+
+    /**
+     * get exchange balances
+     * @param {string} exchangeID  exchange id
+     * @return {array} exchange balances
+     */
+    async getExchangeBalances (exchangeID) {
+        let url = this.apiAddr + "/api/v1/exchange/balances"
+        var data = {
+            exchangeID: exchangeID,
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce()
+        }
+        data.sign = this.sign(data)
+    
+        let result = await axios.get(url, {
+            params: data,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Company-Key': this.key
+            }
+        })
+
+        this.checkData(result.data)
+        return result.data.data
+    }
+
+    /**
+     * trading tranfer
+     * @param {string} fromType  from type: EXCAHNGE, WALLET
+     * @param {string} fromID  from id
+     * @param {string} toType  to type: EXCAHNGE, WALLET
+     * @param {string} toID  to id
+     * @param {string} assetName  asset name
+     * @param {string} amount  asset amount
+     * @return {object} tranfer funding order
+     */
+    async tradingTransfer (fromType, fromID, toType, toID, assetName, amount, remark) {
+        let url = this.apiAddr + "/api/v1/exchange/transfer"
+        var data = {
+            fromType: fromType,
+            fromID: fromID,
+            toType: toType,
+            toID: toID,
+            assetName: assetName,
+            amount: amount,
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce()
+        }
+        data.sign = this.sign(data)
+    
+        let result = await axios.post(url, data, {
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Company-Key': this.key
+            }
+        })
+
+        this.checkData(result.data)
+        return result.data.data
+    }
+
+    /**
+     * get exchange funding records
+     * @param {string} id  record id
+     * @return {object} exchange funding record
+     */
+    async getExchangeFundingRecord (id) {
+        let url = this.apiAddr + "/api/v1/exchange/funding/record"
+        var data = {
+            id: id,
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce()
+        }
+        data.sign = this.sign(data)
+    
+        let result = await axios.get(url, {
+            params: data,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Company-Key': this.key
+            }
+        })
+
+        this.checkData(result.data)
+        return result.data.data
+    }
+
+    /**
+     * get exchange funding records
+     * @param {string} exchangeID  exchange id
+     * @param {string} page  page number
+     * @return {array} exchange funding records
+     */
+    async getExchangeFundingRecords (exchangeID, page) {
+        let url = this.apiAddr + "/api/v1/exchange/funding/records"
+        var data = {
+            exchangeID: exchangeID,
+            page: page,
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce()
+        }
+        data.sign = this.sign(data)
+    
+        let result = await axios.get(url, {
+            params: data,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Company-Key': this.key
+            }
+        })
+
+        this.checkData(result.data)
+        return result.data.data
     }
 
     generateNonce() {

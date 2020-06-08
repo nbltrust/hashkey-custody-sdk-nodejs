@@ -7,7 +7,10 @@ const apiAddr = 'XXXXXXXXXXX'   // host for trial envirenment is: https://openap
 const api = new API(appKey, appSecret, apiAddr)
 
 async function main () {
-    await createAddress("ETH") 
+    //await getExchangeBalances("z41mwygl0gnl2keo") 
+    //await getExchangeFundings("z41mwygl0gnl2keo", 1)
+    //await getExchangeFunding("3qky8xo2l0gpdg7erpmdwzn1")
+    //await tradingTransfer("WALLET", "rKyOD9pAJPAg54e", "EXCHANGE", "qdkrm8621j73zx4y", "USDT", "2.73", "wallet to binance")
 }
 
 main()
@@ -174,3 +177,44 @@ async function getStakingInterest(coinType, date) {
         console.log(e)
     }
 }
+
+async function getExchangeBalances(exchangeID) {
+    try {
+        result = await api.getExchangeBalances(exchangeID)
+        console.dir(result, {depth: null})
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
+}
+
+async function tradingTransfer(fromType, fromID, toType, toID, assetName, amount, remark) {
+    try {
+        result = await api.tradingTransfer(fromType, fromID, toType, toID, assetName, amount, remark)
+        console.dir(result, {depth: null})
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
+}
+
+async function getExchangeFundings(exchangeID, page) {
+    try {
+        result = await api.getExchangeFundingRecords(exchangeID, page)
+        console.dir(result, {depth: null})
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
+}
+
+async function getExchangeFunding(id) {
+    try {
+        result = await api.getExchangeFundingRecord(id)
+        console.dir(result, {depth: null})
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
+}
+
