@@ -542,6 +542,31 @@ class API {
     }
 
     /**
+     * get exchange list
+     * @return {array} exchange list
+     */
+    async getExchanges () {
+        let url = this.apiAddr + "/api/v1/exchanges"
+        var data = {
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce()
+        }
+        data.sign = this.sign(data)
+    
+        let result = await axios.get(url, {
+            params: data,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-Company-Key': this.key
+            }
+        })
+
+        this.checkData(result.data)
+        return result.data.data
+    }
+
+
+    /**
      * get exchange balances
      * @param {string} exchangeID  exchange id
      * @return {array} exchange balances

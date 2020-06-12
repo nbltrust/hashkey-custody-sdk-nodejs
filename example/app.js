@@ -7,6 +7,7 @@ const apiAddr = 'XXXXXXXXXXX'   // host for trial envirenment is: https://openap
 const api = new API(appKey, appSecret, apiAddr)
 
 async function main () {
+    await getExchanges()
     //await getExchangeBalances("z41mwygl0gnl2keo") 
     //await getExchangeFundings("z41mwygl0gnl2keo", 1)
     //await getExchangeFunding("3qky8xo2l0gpdg7erpmdwzn1")
@@ -28,6 +29,15 @@ async function createAddress(coinType) {
 async function verifyAddress(coinType, address) {
     try {
         result = await api.verifyAddress(coinType, address) 
+        console.log(result)
+    } catch(e) {
+        console.log(e)
+    }
+}
+
+async function getBalance(coinType) {
+    try {
+        result = await api.getBalance(coinType)
         console.log(result)
     } catch(e) {
         console.log(e)
@@ -172,6 +182,16 @@ async function getStakingInterest(coinType, date) {
     try {
         result = await api.getStakingInterest(coinType, date)
         console.log(result)
+    } catch(e) {
+        // do something
+        console.log(e)
+    }
+}
+
+async function getExchanges() {
+    try {
+        result = await api.getExchanges()
+        console.dir(result, {depth: null})
     } catch(e) {
         // do something
         console.log(e)
