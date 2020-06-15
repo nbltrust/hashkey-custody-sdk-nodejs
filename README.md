@@ -1,4 +1,4 @@
-# saas node.js sdk
+# hashkey custody node.js sdk
 
 ## Installing
 
