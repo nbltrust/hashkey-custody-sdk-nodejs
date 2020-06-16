@@ -1,7 +1,7 @@
 {
     "name": "@jadepool/saas-sdk",
-    "description": "jadepool saas api sdk",
-    "version": "1.2.0",
+    "description": "hashkey custody api sdk",
+    "version": "1.3.1",
     "main": "index.js",
     "dependencies": {
         "axios": ">=0.18.1",
@@ -9,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git@github.com:nbltrust/jadepool-saas-sdk-nodejs.git"
+        "url": "git@github.com:nbltrust/hashkey-custody-sdk-nodejs.git"
     },
-    "homepage": "https://github.com/nbltrust/jadepool-saas-sdk-nodejs"
+    "homepage": "https://github.com/nbltrust/hashkey-custody-sdk-nodejs"
 }

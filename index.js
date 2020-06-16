@@ -600,6 +600,7 @@ class API {
      * @param {string} toID  to id
      * @param {string} assetName  asset name
      * @param {string} amount  asset amount
+     * @param {string} remark  remark
      * @return {object} tranfer funding order
      */
     async tradingTransfer (fromType, fromID, toType, toID, assetName, amount, remark) {
@@ -611,6 +612,7 @@ class API {
             toID: toID,
             assetName: assetName,
             amount: amount,
+            remark: remark,
             timestamp: Number.parseInt(new Date().valueOf()/1000),
             nonce: this.generateNonce()
         }
