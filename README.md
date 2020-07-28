@@ -1,18 +1,6 @@
-# saas node.js sdk
-
-## Installing
-
-Using npm:
-
-```bash
-npm install @jadepool/saas-sdk
-```
-
 ## Example
 
 ```js
-const API = require('@jadepool/saas-sdk')
-
 const appKey = 'TyTLvCnHINbWZQag88hhmMz1'
 const appSecret = 'uf0rPlTluGnIllGqx0X1os4hQ6rOdXDxStiN4qGd79lS6yeHZaOK4ldvRv1TBqr6'
 const apiAddr = 'http://127.0.0.1:8092'
