@@ -109,6 +109,31 @@ class API {
     }
 
     /**
+     * get app asset list
+     * @return {array} coin type list
+     */
+    async getAssetsWithID () {
+        let url = this.apiAddr + "/api/v1/app/assetsWithID"
+        var data = {
+            timestamp: Number.parseInt(new Date().valueOf()/1000),
+            nonce: this.generateNonce()
+        }
+        data.sign = this.sign(data)
+    
+        let result = await axios.get(url, {
+            params: data,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-App-Key': this.key
+            }
+        })
+
+        this.checkData(result.data)
+
+        return result.data.data.assets
+    }
+
+    /**
      * get app all asset list
      * @return {array} coin type list
      */
